@@ -1,0 +1,88 @@
+version: '2.2'
+services:
+  dvwa:
+    image: vulnerables/web-dvwa
+    ports:
+      - "8888:80"
+    networks:
+      seginfo:
+        ipv4_address: 10.60.80.2
+    mac_address: 02:42:ac:60:80:02
+    hostname: dvwa
+    restart: always
+    mem_limit: "512m"
+    memswap_limit: "512m"
+    cpus: 0.5
+  sonarqube:
+    image: sonarqube:8.4.1-community
+    ports:
+      - "9000:9000"
+    networks:
+      seginfo:
+        ipv4_address: 10.60.80.3
+    mac_address: 02:42:ac:60:80:03
+    hostname: sonarqube
+    restart: always
+    mem_limit: "2048m"
+    memswap_limit: "2048m"
+    cpus: 1
+    logging:
+      options:
+        max-size: "50m"
+  wordpress:
+    build: ./wordpress/
+    ports:
+      - "8889:80"
+    restart: always
+    networks:
+      seginfo:
+        ipv4_address: 10.60.80.4
+    mac_address: 02:42:ac:60:80:04
+    hostname: wordpress
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: admin
+      WORDPRESS_DB_PASSWORD: admin
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_TABLE_PREFIX: "wp_"
+    links:
+      - db:db
+    volumes:
+      - ./wordpress/site:/var/www/html
+    mem_limit: "512m"
+    memswap_limit: "512m"
+    cpus: 0.5
+    logging:
+      options:
+        max-size: 50m
+  db:
+    image: mariadb:10.5.4
+    ports:
+      - "3306:3306"
+    restart: always
+    networks:
+      seginfo:
+        ipv4_address: 10.60.80.5
+    mac_address: 02:42:ac:60:80:05
+    hostname: db
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./wordpress/wordpress.sql:/docker-entrypoint-initdb.d/wordpress.sql
+    mem_limit: "512m"
+    memswap_limit: "512m"
+    cpus: 1
+    logging:
+      options:
+        max-size: 50m
+networks:
+  seginfo:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.60.80.0/24
+    
