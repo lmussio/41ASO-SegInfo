@@ -1,0 +1,4 @@
+sonar.projectKey=dvwa
+sonar.projectName=DVWA
+sonar.sources=.
+sonar.host.url=http://sonarqube:9000
