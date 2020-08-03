@@ -4,10 +4,10 @@ Estudo sobre ataques de SQLi e XSS com PoC em sqlmap e BeeF. Turma `41ASO`, disc
 ## Pré-requisito
 - [Docker](https://docs.docker.com/get-docker/)
 - [Docker Compose](https://docs.docker.com/compose/install/)
+- Baixar o arquivo de configuração https://github.com/lmussio/41ASO-SegInfo/blob/master/docker-compose.yml
 
 ## WordPress
 Foi criado um container de WordPress na versão 3.3.0, obtido através da referência [WordPress Releases](https://wordpress.org/download/releases/).
-wget https://wordpress.org/wordpress-3.3.zip
 
 Para construir a imagem do container de WordPress 3.3.0, é necessário realizar o comando `docker-compose build wordpress`.
 
